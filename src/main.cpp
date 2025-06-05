@@ -1,5 +1,33 @@
-//#include <ncurses.h>
+#include <iostream>
+#include <unistd.h>
+#include <ncurses.h>
 
+void showWelcome() {
+    std::string reset = "\033[0m";
+    std::string neonCyan = "\033[1;36m";
+    std::string neonMagenta = "\033[1;35m";
+
+    std::cout << neonCyan;
+    std::cout << R"( 
+╔════════════════════════════════════════════════╗
+║                                                ║
+║         ██████╗ ██████╗ ██████╗                ║
+║        ██╔════╝██╔═══██╗██╔══██╗               ║
+║        ██║     ██║   ██║██████╔╝               ║
+║        ██║     ██║   ██║██╔═══╝                ║
+║        ╚██████╗╚██████╔╝██║                    ║
+║         ╚═════╝ ╚═════╝ ╚═╝                    ║
+║                                                ║
+║        BitCLI - Binary Command Line Tool       ║
+║        By Luis Fernando                        ║
+╚════════════════════════════════════════════════╝
+)" << std::endl;
+
+    std::cout << neonMagenta << "\nPresiona ENTER para continuar..." << reset << std::endl;
+    std::cin.get(); 
+}
+
+// Menú interactivo con ncurses
 const char* options[] = {
     "Suma binaria",
     "Resta binaria",
@@ -23,6 +51,10 @@ void printMenu(int highlight) {
 }
 
 int main() {
+    // Mostrar pantalla de bienvenida
+    showWelcome();
+
+    // Inicializar ncurses
     initscr();              
     cbreak();             
     noecho();               
@@ -43,10 +75,10 @@ int main() {
             case KEY_DOWN:
                 highlight = (highlight + 1) % n_options;
                 break;
-            case 10:
+            case 10: // ENTER
                 choice = highlight;
                 if (choice == n_options - 1) {
-                    endwin();
+                    endwin(); // Finaliza ncurses
                     return 0;
                 }
                 mvprintw(n_options + 4, 2, "Seleccionaste: %s", options[choice]);
