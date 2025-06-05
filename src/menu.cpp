@@ -1,61 +1,60 @@
-#include <iostream>
-#include <cstdlib>  
-#include <limits>  
+#include <ncurses.h>
 
-using namespace std;
+const char* options[] = {
+    "Suma binaria",
+    "Resta binaria",
+    "Operaciones bitwise",
+    "Conversión binario/decimal",
+    "Salir"
+};
+const int n_options = sizeof(options) / sizeof(options[0]);
 
-void clearScreen() {
-#ifdef _WIN32
-    system("cls");
-#else
-    system("clear");
-#endif
+void printMenu(int highlight) {
+    clear();
+    mvprintw(0, 0, "=== BitCLI Menu ===");
+    for (int i = 0; i < n_options; i++) {
+        if (i == highlight)
+            attron(A_REVERSE);
+        mvprintw(i + 2, 2, options[i]);
+        if (i == highlight)
+            attroff(A_REVERSE);
+    }
+    refresh();
 }
 
-void waitForEnter() {
-    cout << "\nPresiona Enter para continuar...";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cin.get();
-}
+void runMenu() {
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
 
-void showMainMenu() {
-    int option;
+    int highlight = 0;
+    int choice = -1;
+    int input;
 
-    do {
-        clearScreen();
-        cout << "=============================\n";
-        cout << "       🚀 BitCLI Menu        \n";
-        cout << "=============================\n";
-        cout << "1. Suma binaria\n";
-        cout << "2. Resta binaria\n";
-        cout << "3. Operaciones bitwise\n";
-        cout << "4. Conversión decimal/binario\n";
-        cout << "0. Salir\n";
-        cout << "-----------------------------\n";
-        cout << "Elige una opción: ";
-        cin >> option;
+    while (true) {
+        printMenu(highlight);
+        input = getch();
 
-        switch (option) {
-            case 1:
-                cout << "👉 Suma binaria seleccionada (aquí irá la función)\n";
+        switch (input) {
+            case KEY_UP:
+                highlight = (highlight - 1 + n_options) % n_options;
                 break;
-            case 2:
-                cout << "👉 Resta binaria seleccionada (aquí irá la función)\n";
+            case KEY_DOWN:
+                highlight = (highlight + 1) % n_options;
                 break;
-            case 3:
-                cout << "👉 Bitwise seleccionada (aquí irá la función)\n";
+            case 10:
+                choice = highlight;
+                if (choice == n_options - 1) {
+                    endwin();
+                    return;
+                }
+                mvprintw(n_options + 4, 2, "Seleccionaste: %s", options[choice]);
+                mvprintw(n_options + 5, 2, "Presiona cualquier tecla...");
+                getch();
                 break;
-            case 4:
-                cout << "👉 Conversión seleccionada (aquí irá la función)\n";
-                break;
-            case 0:
-                cout << "👋 Saliendo...\n";
-                break;
-            default:
-                cout << "❌ Opción no válida.\n";
         }
+    }
 
-        if (option != 0) waitForEnter();
-
-    } while (option != 0);
+    endwin();
 }
