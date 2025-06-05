@@ -11,7 +11,7 @@ const int n_options = sizeof(options) / sizeof(options[0]);
 
 void printMenu(int highlight) {
     clear();
-    mvprintw(0, 0, "=== BitCLI Menu ===");
+    mvprintw(0, 0, "=== BitCLI M enu ===");
     for (int i = 0; i < n_options; i++) {
         if (i == highlight)
             attron(A_REVERSE);
