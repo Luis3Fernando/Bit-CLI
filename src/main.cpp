@@ -1,4 +1,4 @@
-#include <ncurses.h>
+//#include <ncurses.h>
 
 const char* options[] = {
     "Suma binaria",
@@ -11,7 +11,7 @@ const int n_options = sizeof(options) / sizeof(options[0]);
 
 void printMenu(int highlight) {
     clear();
-    mvprintw(0, 0, "=== BitCLI M enu ===");
+    mvprintw(0, 0, "=== BitCLI Menu ===");
     for (int i = 0; i < n_options; i++) {
         if (i == highlight)
             attron(A_REVERSE);
