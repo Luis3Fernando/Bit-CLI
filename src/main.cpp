@@ -2,7 +2,7 @@
 #include "menu.h"
 
 int main() {
-    showWelcome();    
-    runMenu(); 
+    showWelcome(); 
+    runMenu();
     return 0;
 }
